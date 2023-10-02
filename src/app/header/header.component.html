@@ -1,0 +1,33 @@
+<mat-toolbar class="header">
+  <div
+    class="profile-info"
+    *ngIf="!(isAverageScreen$ | async); else burgerMenu"
+  >
+    <div class="profile-image">
+      <img src="/assets/icons/profile-icon.png" alt="" class="profile-icon" />
+    </div>
+    <div class="profile-text">
+      <span class="profile-user">Иванов</span>
+      <span class="profil-role">Администратор</span>
+    </div>
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </div>
+  <ng-template #burgerMenu>
+    <div class="burger-menu">
+      <button
+        *ngIf="!(isDrawerOpen$ | async)"
+        mat-icon-button
+        (click)="openDrawer()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button
+        *ngIf="isDrawerOpen$ | async"
+        mat-icon-button
+        (click)="closeDrawer()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</mat-toolbar>

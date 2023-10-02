@@ -1,0 +1,282 @@
+<div class="section-table">
+  <div class="container">
+    <div class="table-info">
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 25]"
+        [showFirstLastButtons]="false"
+        #paginator
+      >
+      </mat-paginator>
+      <div class="selected-users">
+        {{ "Количество выбранных элементов: " + selectedUsers.length }}
+      </div>
+    </div>
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      *ngIf="!(isSmallScreen$ | async); else smallTable"
+    >
+      <ng-container matColumnDef="actions" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Действия
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon>more_horiz</mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="login" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          <div class="login-with-checkbox">
+            <input
+              class="checkbox"
+              type="checkbox"
+              [(ngModel)]="isChecked"
+              (change)="onCheckboxChange('all', $event)"
+            />
+            Логин
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="login-input" style="display: flex">
+            <input
+              class="checkbox"
+              type="checkbox"
+              (change)="onCheckboxChange(element.id, $event)"
+              [checked]="selectedUsers.includes(element.id.toString())"
+            />
+            <span>{{ element.name }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          E-mail
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="phone" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Телефон
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.phone | phoneNumberRu }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="role" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Роли
+        </th>
+        <td mat-cell *matCellDef="let element" class="isAdmin-td">
+          {{ element.isAdmin ? "Администратор" : "Пользователь" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="updateDate" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Дата изменения
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.update_at ? convertToDate(element.update_at) : "-" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="creationDate" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Дата создания
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.create_at ? convertToDate(element.create_at) : "-" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Статус
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.status === "BLOCKED" ? "Заблокирован" : "Активен" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="salary" class="table-container">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngClass]="{ 'mat-header-row': isSmallScreen$ | async }"
+        >
+          Наличие ЭП
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{ 'mat-cell': isSmallScreen$ | async }"
+        >
+          <mat-icon *ngIf="element.isEcp" style="color: green"
+            >check_circle</mat-icon
+          >
+          <mat-icon *ngIf="!element.isEcp" style="color: red">cancel</mat-icon>
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+        style="background-color: rgba(218, 32, 50, 1)"
+        [ngClass]="{ 'tr-class': isSmallScreen$ | async }"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [ngClass]="{ 'tr-class': isSmallScreen$ | async }"
+      ></tr>
+    </table>
+    <ng-template #smallTable>
+      <div class="small-table" *ngFor="let element of finallyResult">
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Действия</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">
+              <mat-icon>more_horiz</mat-icon>
+            </span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Логин</span>
+          </div>
+          <div class="table-body">
+            <div class="login-input">
+              <input
+                class="checkbox"
+                type="checkbox"
+                (change)="onCheckboxChange(element.id.toString(), $event)"
+                [checked]="selectedUsers.includes(element.id.toString())"
+              />
+              <span>{{ element.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">E-mail</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{ element.email }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Телефон</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{
+              element.phone.toString() | phoneNumberRu
+            }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Роли</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{
+              element.role ? "Администратор" : "Пользователь"
+            }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Дата изменения</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{
+              element.update_at ? convertToDate(element.update_at) : "-"
+            }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Дата создания</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{
+              element.create_at ? convertToDate(element.create_at) : "-"
+            }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Статус</span>
+          </div>
+          <div class="table-body">
+            <span class="body-content">{{
+              element.status === "BLOCKED" ? "Заблокирован" : "Активен"
+            }}</span>
+          </div>
+        </div>
+        <div class="table-item">
+          <div class="table-head">
+            <span class="head-content">Наличиие ЭП</span>
+          </div>
+          <div class="table-body">
+            <mat-icon *ngIf="element.isEcp" style="color: green"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!element.isEcp" style="color: red"
+              >cancel</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <div class="empty-box" *ngIf="isEmpty">
+      <p>Нет пользователей для отображения</p>
+    </div>
+    <div class="table-info">
+      <mat-paginator
+        (page)="syncPrimaryPaginator($event)"
+        [pageSize]="paginator.pageSize"
+        [pageIndex]="paginator.pageIndex"
+        [length]="paginator.length"
+        [pageSizeOptions]="paginator.pageSizeOptions"
+      >
+      </mat-paginator>
+      <div class="selected-users">
+        {{ "Количество выбранных элементов: " + selectedUsers.length }}
+      </div>
+    </div>
+  </div>
+</div>

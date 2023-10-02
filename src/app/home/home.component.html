@@ -1,0 +1,74 @@
+<mat-drawer-container>
+  <mat-drawer
+    class="drawer-container"
+    [mode]="!(isAverageScreen$ | async) ? 'side' : 'over'"
+    [position]="!(isAverageScreen$ | async) ? 'start' : 'end'"
+    [opened]="!(isAverageScreen$ | async) || isOpen"
+    [ngClass]="{
+      'average-drawer-container': (isAverageScreen$ | async),
+      'small-drwaer-container': (isSmallScreen$ | async)
+    }"
+  >
+    <app-side-bar
+      *ngIf="!(isAverageScreen$ | async); else smallSideBar"
+    ></app-side-bar>
+    <ng-template #smallSideBar>
+      <app-small-side-bar></app-small-side-bar>
+    </ng-template>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="wraper">
+      <section class="container">
+        <button mat-button class="back-btn">
+          <mat-icon>arrow_back_ios</mat-icon>
+          Назад
+        </button>
+        <h1 class="container-title">
+          Настройка учетных записей сотрудников контрагента
+        </h1>
+        <div
+          class="container-buttons"
+          [ngClass]="{ 'average-buttons-container': isSmallScreen$ | async }"
+        >
+          <div class="buttons">
+            <button
+              mat-button
+              class="btn"
+              [disabled]="isAdd"
+              [class.disabled-btn]="isAdd === true"
+              (click)="isAdd = !isAdd"
+            >
+              Добавить <mat-icon>add_circle</mat-icon>
+            </button>
+            <button mat-button class="btn" (click)="changeStatus('ACTIVE')">
+              Разблокировать <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-button class="btn" (click)="changeStatus('BLOCKED')">
+              Заблокировать <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+          <button
+            mat-button
+            class="filter-btn"
+            [class.disabled-filter-btn]="isAdd === false"
+            [disabled]="!isAdd"
+            (click)="isAdd = !isAdd"
+          >
+            Фильтр <mat-icon>filter_list</mat-icon>
+          </button>
+        </div>
+      </section>
+      <app-filter-form *ngIf="!isAdd; else addForm"></app-filter-form>
+      <ng-template #addForm>
+        <app-add-form></app-add-form>
+      </ng-template>
+      <app-table></app-table>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<div class="lds-ring">
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>

@@ -1,0 +1,111 @@
+<section class="form-section">
+  <div class="container">
+    <h1 class="form-title">Добавить</h1>
+    <form #myForm="ngForm" class="form" [formGroup]="additionForm">
+      <div class="login-box box">
+        <mat-label id="login">Логин</mat-label>
+        <mat-form-field appearance="outline" class="form-field">
+          <input
+            matInput
+            formControlName="name"
+            name="login"
+            required
+            class="input"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="additionForm.controls['name'].reset()"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <mat-error *ngIf="additionForm.get('name').hasError('required')">
+            Заполните поле
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="tel-box box">
+        <mat-label id="tel">Телефон</mat-label>
+        <mat-form-field appearance="outline" class="form-field">
+          <input
+            type="tel"
+            matInput
+            formControlName="phone"
+            required
+            name="tel"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="additionForm.controls['phone'].reset()"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <mat-error *ngIf="additionForm.get('phone').hasError('required')">
+            Заполните поле
+          </mat-error>
+          <mat-error
+            *ngIf="additionForm.get('phone').hasError('invalidPhoneNumber')"
+          >
+            Недопустимые символы
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="email-box box">
+        <mat-label id="email">E-mail</mat-label>
+        <mat-form-field appearance="outline" class="form-field">
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+            required
+            name="email"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="additionForm.controls['email'].reset()"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <mat-error *ngIf="additionForm.get('email').hasError('required')">
+            Заполните поле
+          </mat-error>
+          <mat-error *ngIf="additionForm.get('email').hasError('email')">
+            Недопустимые символы
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="role-box box">
+        <mat-label id="role">Роль</mat-label>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-select formControlName="role" [(value)]="selectedRole">
+            <mat-option value="false">Пользователь</mat-option>
+            <mat-option value="true">Администратор</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="buttons-container">
+      <button mat-button type="button" class="submit-btn" (click)="onSubmit()">
+        Отправить
+      </button>
+      <button
+        mat-button
+        type="button"
+        class="cancel-btn"
+        (click)="onClearForm()"
+      >
+        Отмена
+      </button>
+      <button
+        mat-button
+        type="button"
+        class="reset-btn"
+        (click)="onClearForm()"
+      >
+        Сбросить
+      </button>
+    </div>
+  </div>
+</section>

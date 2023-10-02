@@ -1,0 +1,148 @@
+<section class="form-section">
+  <div class="container">
+    <h1 class="form-title">Фильтр</h1>
+    <form #myForm="ngForm" class="form" [formGroup]="filterForm">
+      <div class="user-data">
+        <div class="first-block">
+          <div class="login-box box">
+            <mat-label id="login">Логин</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <input
+                matInput
+                formControlName="name"
+                name="login"
+                class="input"
+              />
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="filterForm.controls['name'].reset()"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="tel-box box">
+            <mat-label id="tel">Телефон</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <input type="tel" matInput formControlName="phone" name="tel" />
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="filterForm.controls['phone'].reset()"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <mat-error
+                *ngIf="filterForm.get('phone').hasError('invalidPhoneNumber')"
+              >
+                Недопустимые символы
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="second-block">
+          <div class="email-box box">
+            <mat-label id="email">E-mail</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <input
+                type="email"
+                matInput
+                formControlName="email"
+                name="email"
+              />
+              <button
+                type="button"
+                mat-icon-button
+                matSuffix
+                (click)="filterForm.controls['email'].reset()"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <mat-error *ngIf="filterForm.get('email').hasError('email')">
+                Недопустимые символы
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="role-box box">
+            <mat-label id="role">Роль</mat-label>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-select formControlName="role" [(value)]="selectedRole">
+                <mat-option [value]="false">Пользователь</mat-option>
+                <mat-option [value]="true">Администратор</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="date">
+        <div class="creation-box date-box">
+          <mat-label id="creation">Дата создания</mat-label>
+          <mat-form-field appearance="outline" class="form-field">
+            <input
+              matInput
+              [matDatepicker]="creation"
+              formControlName="create_at"
+              name="creation"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="creation"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #creation></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="change-box date-box">
+          <mat-label id="changeDate">Дата изменения</mat-label>
+          <mat-form-field appearance="outline" class="form-field">
+            <input
+              matInput
+              [matDatepicker]="change"
+              formControlName="update_at"
+              name="changeDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="change"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #change></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="status">
+        <div class="status-box box">
+          <mat-label id="status">Статус</mat-label>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-select formControlName="status" [(value)]="selectedStatus">
+              <mat-option value="ACTIVE">Активен</mat-option>
+              <mat-option value="BLOCKED">Заблокирован</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div class="buttons-container">
+      <button mat-button type="button" class="apply-btn" (click)="onSubmit()">
+        Применить
+      </button>
+      <button
+        mat-button
+        type="button"
+        class="cancel-btn"
+        (click)="onClearForm()"
+      >
+        Отмена
+      </button>
+      <button
+        mat-button
+        type="button"
+        class="reset-btn"
+        (click)="onClearForm()"
+      >
+        Сбросить
+      </button>
+    </div>
+  </div>
+</section>

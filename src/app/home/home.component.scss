@@ -1,0 +1,76 @@
+@import "../../styles.scss";
+
+.drawer-container {
+    width: 17%;
+    max-height: 100%;
+    background-color: #666f78;
+}
+
+.average-drawer-container {
+    width: 50%;
+}
+
+.small-drwaer-container {
+    width: 100%;
+}
+
+.wraper {
+    width: 90%;
+    margin: 0 7% 0 3%;
+    .container {
+        .back-btn {
+            color: rgba(102, 111, 120, 1);
+            font-size: 14px;
+        }
+
+        .container-title {
+            font-size: 30px;
+        }
+
+        .average-buttons-container {
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .container-buttons {
+            display: flex;
+            justify-content: space-between;
+
+            .buttons {
+                display: flex;
+                justify-content: start;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 24px;
+                .btn {
+                    background-color: $main-color;
+                    color: white;
+
+                    mat-icon {
+                        margin-left: 8px;
+                        order: 2;
+                    }
+                }
+
+                .disabled-btn {
+                    background-color: rgb(213, 213, 213);
+                    color: rgba(102, 111, 120, 1);
+                }
+            }
+
+            .filter-btn {
+                background-color: $main-color;
+                color: white;
+                max-width: 87px;
+            }
+
+            .small-filter-btn {
+            }
+
+            .disabled-filter-btn {
+                background-color: rgb(213, 213, 213);
+                color: rgba(102, 111, 120, 1);
+            }
+        }
+    }
+}

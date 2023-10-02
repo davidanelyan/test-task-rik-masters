@@ -1,0 +1,35 @@
+@import "../../styles.scss";
+
+.header {
+    color: white;
+    background-color: $main-color;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100% !important;
+    height: 10vh;
+
+    .profile-info {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
+        margin-right: 5%;
+
+        .profile-image {
+            background-color: rgb(154, 154, 154);
+            border-radius: 20px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-text {
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

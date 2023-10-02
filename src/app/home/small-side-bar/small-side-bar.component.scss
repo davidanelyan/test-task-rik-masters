@@ -1,0 +1,61 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    color: white;
+    overflow-x: hidden;
+
+    .user-info,
+    .user-role {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 18px;
+        border-bottom: 1px solid #a2a9b1;
+    }
+
+    .agent {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #a2a9b1;
+        .agent-info {
+            display: flex;
+            flex-direction: column;
+            margin: 24px 0;
+
+            .agent-info-title {
+                font-size: 20px;
+                margin: 0;
+            }
+        }
+    }
+
+    .managment {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .managment-info {
+            display: flex;
+            flex-direction: column;
+
+            .managment-info-title {
+                font-size: 18px;
+                margin: 0;
+            }
+        }
+    }
+
+    .sub-agent {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+
+        .sub-agent-info {
+            .sub-agent-title {
+                font-size: 18px;
+                margin: 0;
+            }
+        }
+    }
+}
