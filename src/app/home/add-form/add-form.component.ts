@@ -12,6 +12,7 @@ import {
 import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-material.module';
 import { UserService } from 'src/app/shared/services/user.service';
 import { FinallyUser } from 'src/app/shared/interfaces/user.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-form',
@@ -24,7 +25,11 @@ export class AddFormComponent {
   public additionForm: FormGroup;
   public selectedRole: string;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private _snackBar: MatSnackBar
+  ) {
     this.additionForm = fb.group({
       name: fb.control(null, [Validators.required, this.loginValidator()]),
       phone: fb.control(null, [
@@ -37,17 +42,21 @@ export class AddFormComponent {
   }
 
   public onSubmit(): void {
-    const addedUser: FinallyUser = {
-      name: this.additionForm.value.name,
-      email: this.additionForm.value.email,
-      phone: this.additionForm.value.phone,
-      create_at: +new Date(),
-      update_at: +new Date(),
-      role: this.additionForm.value.role,
-      isEcp: true,
-      status: 'ACTIVE',
-    };
-    this.userService.setAddedUser(addedUser);
+    if (this.additionForm.valid) {
+      const addedUser: FinallyUser = {
+        name: this.additionForm.value.name,
+        email: this.additionForm.value.email,
+        phone: this.additionForm.value.phone,
+        create_at: +new Date(),
+        update_at: +new Date(),
+        role: this.additionForm.value.role,
+        isEcp: true,
+        status: 'ACTIVE',
+      };
+      this.userService.setAddedUser(addedUser);
+    } else {
+      this.openSnackBar('Заполните поля', 'Закрыть');
+    }
   }
 
   public onClearForm(): void {
@@ -84,5 +93,9 @@ export class AddFormComponent {
 
       return null;
     };
+  }
+
+  private openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, { duration: 3000 });
   }
 }
