@@ -30,21 +30,28 @@ export class FilterFormComponent implements OnInit {
     private userSerivce: UserService,
     private _snackBar: MatSnackBar
   ) {
-    this.filterForm = fb.group({
-      name: fb.control(null, [this.loginValidator()]),
-      phone: fb.control(null, [this.phoneNumberValidator()]),
-      email: fb.control(null, [Validators.email]),
-      role: fb.control(null),
-      create_at: fb.control(null),
-      update_at: fb.control(null),
-      status: fb.control(null),
-    });
+    this.filterForm = fb.group(
+      {
+        name: fb.control(null, [this.loginValidator()]),
+        phone: fb.control(null, [this.phoneNumberValidator()]),
+        email: fb.control(null, [Validators.email]),
+        role: fb.control(null),
+        create_at: fb.control(null),
+        update_at: fb.control(null),
+        status: fb.control(null),
+      },
+      { validator: this.atLeastOneFieldValidator() }
+    );
   }
 
   public ngOnInit(): void {}
 
   public onSubmit(): void {
-    this.userSerivce.setFilters(this.filterForm.value);
+    if (this.filterForm.valid) {
+      this.userSerivce.setFilters(this.filterForm.value);
+    } else {
+      this.openSnackBar('Заполните поле для фильтрации', 'Закрыть');
+    }
   }
 
   public onClearForm(): void {
@@ -83,7 +90,25 @@ export class FilterFormComponent implements OnInit {
     };
   }
 
+  private atLeastOneFieldValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control instanceof FormGroup) {
+        const fields = Object.keys(control.controls);
+        const isAtLeastOneFieldFilled = fields.some(
+          (field) =>
+            control.get(field).value !== null && control.get(field).value !== ''
+        );
+
+        return isAtLeastOneFieldFilled
+          ? null
+          : { atLeastOneFieldRequired: true };
+      }
+
+      return null;
+    };
+  }
+
   private openSnackBar(message: string, action: string): void {
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, { duration: 3000 });
   }
 }

@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import {
   FinallyUser,
@@ -14,6 +15,7 @@ import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-m
 import { UserService } from 'src/app/shared/services/user.service';
 import { PhoneNumberRuPipe } from 'src/app/shared/pipes/phone-number-ru.pipe';
 
+@UntilDestroy()
 @Component({
   selector: 'app-table',
   standalone: true,
@@ -58,16 +60,19 @@ export class TableComponent implements OnInit {
   public ngOnInit(): void {
     this.userService
       .getAllDataAndSaveToLocaleStorage()
+      .pipe(untilDestroyed(this))
       .subscribe((respData) => {
         this.finallyResult = respData;
         this.getDataSource();
       });
 
-    this.userService.filterState$.subscribe((filters) => {
-      if (filters) this.applyFilter(filters);
-    });
+    this.userService.filterState$
+      .pipe(untilDestroyed(this))
+      .subscribe((filters) => {
+        if (filters) this.applyFilter(filters);
+      });
 
-    this.userService.addedUser$.subscribe((user) => {
+    this.userService.addedUser$.pipe(untilDestroyed(this)).subscribe((user) => {
       if (user) this.additionUser(user);
     });
   }
