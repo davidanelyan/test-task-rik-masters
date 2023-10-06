@@ -12,6 +12,7 @@ import {
 import { AngularMaterialModule } from 'src/app/shared/angular-material/angular-material.module';
 import { UserService } from 'src/app/shared/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { log } from 'console';
 
 @Component({
   selector: 'app-filter-form',
@@ -56,6 +57,11 @@ export class FilterFormComponent implements OnInit {
 
   public onClearForm(): void {
     this.filterForm.reset();
+  }
+
+  public onCancel(): void {
+    this.filterForm.reset();
+    this.userSerivce.setFilters(this.filterForm.value);
   }
 
   private phoneNumberValidator(): ValidatorFn {
